@@ -68,4 +68,144 @@ class Registro{
         }
         return $result;
     }
+
+    public function registrar_docente($model){
+        try{
+            $sql = "insert into docentes (idPersona, cNivel, cTurno, cEstado, cFecReg) values (?,?,?,?,?)";
+            $stm = $this->pdo->prepare($sql);
+            $stm->execute([
+                $model->idPersona,
+                $model->cNivel,
+                $model->cTurno,
+                1,
+                $model->cFecReg
+            ]);
+            $result = 1;
+        } catch (Exception $e){
+            $this->log->insert($e->getMessage(), get_class($this).'|'.__FUNCTION__);
+            $result = 2;
+        }
+        return $result;
+    }
+
+    public function listar_docentes(){
+        try{
+            $sql = "select * from persona p inner join docentes d on p.idPersona = d.idPersona";
+            $stm = $this->pdo->prepare($sql);
+            $stm->execute();
+            $result = $stm->fetchAll();
+        } catch (Exception $e){
+            $this->log->insert($e->getMessage(), get_class($this).'|'.__FUNCTION__);
+            $result = [];
+        }
+        return $result;
+    }
+
+    public function registrar_asistencia($model){
+        try{
+            $sql = "insert into asistencia (idPersona, dFecha, dHora, cTurno) values (?,?,?,?)";
+            $stm = $this->pdo->prepare($sql);
+            $stm->execute([
+                $model->idPersona,
+                $model->dFecha,
+                $model->dHora,
+                $model->cTurno
+            ]);
+            $result = 1;
+        } catch (Exception $e){
+            $this->log->insert($e->getMessage(), get_class($this).'|'.__FUNCTION__);
+            $result = 2;
+        }
+        return $result;
+    }
+
+    public function registrar_justificacion($model){
+        try{
+            $sql = "insert into justificacion (idPersona, dFecha, cTipo, cDetalle, fecha_justificacion) values (?,?,?,?,?)";
+            $stm = $this->pdo->prepare($sql);
+            $stm->execute([
+                $model->idPersona,
+                $model->dFecha,
+                $model->cTipo,
+                $model->cDetalle,
+                $model->fecha_justificacion
+            ]);
+            $result = 1;
+        } catch (Exception $e){
+            $this->log->insert($e->getMessage(), get_class($this).'|'.__FUNCTION__);
+            $result = 2;
+        }
+        return $result;
+    }
+
+    public function listar_asistencia_persona($id, $fecha, $hora){
+        try{
+            $sql = "select * from asistencia where idPersona = ? and dFecha = ? and dHora = ?";
+            $stm = $this->pdo->prepare($sql);
+            $stm->execute([
+                $id,
+                $fecha,
+                $hora
+            ]);
+            $result = $stm->fetchAll();
+        } catch (Exception $e){
+            $this->log->insert($e->getMessage(), get_class($this).'|'.__FUNCTION__);
+            $result = [];
+        }
+        return $result;
+    }
+
+    public function listar_asistencia_dia($fecha){
+        try{
+            $sql = "select * from asistencia a inner join persona p on a.idPersona = p.idPersona inner join docentes d on p.idPersona = d.idPersona where a.dFecha = ?";
+            $stm = $this->pdo->prepare($sql);
+            $stm->execute([
+                $fecha
+            ]);
+            $result = $stm->fetchAll();
+        } catch (Exception $e){
+            $this->log->insert($e->getMessage(), get_class($this).'|'.__FUNCTION__);
+            $result = [];
+        }
+        return $result;
+    }
+
+    public function listar_justificacion($fecha){
+        try{
+            $sql = "select * from justificacion j inner join persona p on j.idPersona = p.idPersona inner join docentes d on p.idPersona = d.idPersona where j.fecha_justificacion = ?";
+            $stm = $this->pdo->prepare($sql);
+            $stm->execute([
+                $fecha
+            ]);
+            $result = $stm->fetchAll();
+        } catch (Exception $e){
+            $this->log->insert($e->getMessage(), get_class($this).'|'.__FUNCTION__);
+            $result = [];
+        }
+        return $result;
+    }
+
+    public function registrar_foto($model){
+        try{
+            $sql = "update asistencia set
+                ubicacion_x = ?,
+                ubicacion_y = ?,
+                ubicacion_nombre = ?,
+                foto = ?
+                where idAsistencia = ?";
+            $stm = $this->pdo->prepare($sql);
+            $stm->execute([
+                $model->ubicacion_x,
+                $model->ubicacion_y,
+                $model->ubicacion_nombre,
+                $model->foto,
+                $model->idAsistencia,
+            ]);
+            $result = 1;
+        } catch (Exception $e){
+            $this->log->insert($e->getMessage(), get_class($this).'|'.__FUNCTION__);
+            $result = 2;
+        }
+        return $result;
+    }
 }
