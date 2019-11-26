@@ -126,6 +126,7 @@ class RegistroController{
     }
 
     public function registrar_asistencia(){
+        $datos = [];
         try{
             $model = new Registro();
             //If All OK, the message does not change
@@ -136,19 +137,20 @@ class RegistroController{
                 $model->dHora = $_POST['hora'];
                 $model->cTurno = $_POST['turno'];
                 $result = $this->registro->registrar_asistencia($model);
+                if($result == 1){
+                    $datos = $this->registro->listar_asistencia_persona($_POST['id_persona'], $_POST['fecha'], $_POST['hora']);
+                }
             } else {
-                $user = [];
                 $result = 6;
                 $message = "Code 6: Datos No Recibidos";
             }
         } catch (Exception $e){
             $this->log->insert($e->getMessage(), get_class($this).'|'.__FUNCTION__);
-            $user = [];
             $result = 2;
             $message = "Code 2: General Error";
         }
         $response = array("code" => $result,"message" => $message);
-        $data = array("result" => $response);
+        $data = array("result" => $response, "data" => $datos);
         echo json_encode($data);
     }
 
