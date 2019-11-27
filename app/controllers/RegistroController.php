@@ -251,6 +251,29 @@ class RegistroController{
         echo json_encode($data);
     }
 
+    public function listar_asistencia_dia_turno(){
+        try{
+            //If All OK, the message does not change
+            $message = "We did it. Your awesome... and beatiful";
+            if(isset($_POST['fecha']) && isset($_POST['turno'])){
+                $datos = $this->registro->listar_asistencia_dia_turno($_POST['fecha'],$_POST['turno']);
+                $result = 1;
+            } else {
+                $datos = [];
+                $result = 6;
+                $message = "Code 6: Datos No Recibidos";
+            }
+        } catch (Exception $e){
+            $this->log->insert($e->getMessage(), get_class($this).'|'.__FUNCTION__);
+            $datos = [];
+            $result = 2;
+            $message = "Code 2: General Error";
+        }
+        $response = array("code" => $result,"message" => $message);
+        $data = array("result" => $response, "data" => $datos);
+        echo json_encode($data);
+    }
+
     public function registrar_foto(){
         try{
             $model = new Registro();

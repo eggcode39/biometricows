@@ -140,7 +140,7 @@ class Registro{
 
     public function listar_asistencia_persona($id, $fecha, $hora){
         try{
-            $sql = "select * from asistencia where idPersona = ? and dFecha = ? and dHora = ?";
+            $sql = "select * from asistencia where idPersona = ? and dFecha = ? and dHora = ? limit 1";
             $stm = $this->pdo->prepare($sql);
             $stm->execute([
                 $id,
@@ -161,6 +161,21 @@ class Registro{
             $stm = $this->pdo->prepare($sql);
             $stm->execute([
                 $fecha
+            ]);
+            $result = $stm->fetchAll();
+        } catch (Exception $e){
+            $this->log->insert($e->getMessage(), get_class($this).'|'.__FUNCTION__);
+            $result = [];
+        }
+        return $result;
+    }
+
+    public function listar_asistencia_dia_turno($fecha, $turno){
+        try{
+            $sql = "select * from asistencia a inner join persona p on a.idPersona = p.idPersona inner join docentes d on p.idPersona = d.idPersona where a.dFecha = ? and a.cTurno = ?";
+            $stm = $this->pdo->prepare($sql);
+            $stm->execute([
+                $fecha, $turno
             ]);
             $result = $stm->fetchAll();
         } catch (Exception $e){
