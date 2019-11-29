@@ -223,4 +223,17 @@ class Registro{
         }
         return $result;
     }
+
+    public function listar_fechas_asistencia(){
+        try{
+            $sql = "select distinct dFecha fecha from asistencia order by dFecha asc";
+            $stm = $this->pdo->prepare($sql);
+            $stm->execute();
+            $result = $stm->fetchAll();
+        } catch (Exception $e){
+            $this->log->insert($e->getMessage(), get_class($this).'|'.__FUNCTION__);
+            $result = [];
+        }
+        return $result;
+    }
 }

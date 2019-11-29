@@ -274,6 +274,29 @@ class RegistroController{
         echo json_encode($data);
     }
 
+    public function listar_asistencias(){
+        $datos = [];
+        try{
+            $message = "We did it. Your awesome... and beatiful";
+            $fechas = $this->registro->listar_fechas_asistencia();
+            foreach ($fechas as $f){
+                //$datos[] = $f->fecha;
+                $docentes = $this->registro->listar_asistencia_dia($f->fecha);
+                foreach ($docentes as $d){
+                    $datos[$f->fecha][] = $d;
+                }
+            }
+            $result = 1;
+        }catch (Exception $e){
+            $this->log->insert($e->getMessage(), get_class($this).'|'.__FUNCTION__);
+            $result = 2;
+            $message = "Code 2: General Error";
+        }
+        $response = array("code" => $result,"message" => $message);
+        $data = array("result" => $response, "data" => $datos);
+        echo json_encode($data);
+    }
+
     public function registrar_foto(){
         try{
             $model = new Registro();
