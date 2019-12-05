@@ -279,12 +279,17 @@ class RegistroController{
         try{
             $message = "We did it. Your awesome... and beatiful";
             $fechas = $this->registro->listar_fechas_asistencia();
+            $i = 0;
             foreach ($fechas as $f){
                 //$datos[] = $f->fecha;
                 $docentes = $this->registro->listar_asistencia_dia($f->fecha);
-                foreach ($docentes as $d){
+                $datos[$i]['fecha'] = $f->fecha;
+                $datos[$i]['docentes'] = $docentes;
+
+                /*foreach ($docentes as $d){
                     $datos[$f->fecha][] = $d;
-                }
+                }*/
+                $i++;
             }
             $result = 1;
         }catch (Exception $e){
