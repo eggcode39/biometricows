@@ -16,3 +16,4 @@ define('_USER_DB_', 'root');
 define('_PASSWORD_DB_', '');
 //Definicion de clave de desencriptacion
 define('_FULL_KEY','ñlasopweir');
+define('_VIEW_PATH_','app/view/');

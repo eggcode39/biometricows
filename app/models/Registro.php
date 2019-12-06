@@ -71,7 +71,7 @@ class Registro{
 
     public function registrar_docente($model){
         try{
-            $sql = "insert into docentes (idPersona, cNivel, cTurno, cEstado, cFecReg) values (?,?,?,?,?)";
+            $sql = "insert into docentes (idPersona, cNivel, cTurno, cEstado, dFecReg) values (?,?,?,?,?)";
             $stm = $this->pdo->prepare($sql);
             $stm->execute([
                 $model->idPersona,
@@ -103,13 +103,14 @@ class Registro{
 
     public function registrar_asistencia($model){
         try{
-            $sql = "insert into asistencia (idPersona, dFecha, dHora, cTurno) values (?,?,?,?)";
+            $sql = "insert into asistencia (idPersona, dFecha, dHora, cTurno, tipo) values (?,?,?,?,?)";
             $stm = $this->pdo->prepare($sql);
             $stm->execute([
                 $model->idPersona,
                 $model->dFecha,
                 $model->dHora,
-                $model->cTurno
+                $model->cTurno,
+                $model->tipo
             ]);
             $result = 1;
         } catch (Exception $e){
@@ -155,9 +156,39 @@ class Registro{
         return $result;
     }
 
+    public function listar_asistencia_dia_entrada($fecha){
+        try{
+            $sql = "select * from asistencia a inner join persona p on a.idPersona = p.idPersona inner join docentes d on p.idPersona = d.idPersona where a.dFecha = ? and tipo = 'ENTRADA'";
+            $stm = $this->pdo->prepare($sql);
+            $stm->execute([
+                $fecha
+            ]);
+            $result = $stm->fetchAll();
+        } catch (Exception $e){
+            $this->log->insert($e->getMessage(), get_class($this).'|'.__FUNCTION__);
+            $result = [];
+        }
+        return $result;
+    }
+
     public function listar_asistencia_dia($fecha){
         try{
             $sql = "select * from asistencia a inner join persona p on a.idPersona = p.idPersona inner join docentes d on p.idPersona = d.idPersona where a.dFecha = ?";
+            $stm = $this->pdo->prepare($sql);
+            $stm->execute([
+                $fecha
+            ]);
+            $result = $stm->fetchAll();
+        } catch (Exception $e){
+            $this->log->insert($e->getMessage(), get_class($this).'|'.__FUNCTION__);
+            $result = [];
+        }
+        return $result;
+    }
+
+    public function listar_asistencia_dia_salida($fecha){
+        try{
+            $sql = "select * from asistencia a inner join persona p on a.idPersona = p.idPersona inner join docentes d on p.idPersona = d.idPersona where a.dFecha = ? and tipo = 'SALIDA'";
             $stm = $this->pdo->prepare($sql);
             $stm->execute([
                 $fecha
