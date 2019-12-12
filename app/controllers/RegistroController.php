@@ -206,6 +206,61 @@ class RegistroController{
         echo json_encode($data);
     }
 
+    public function listar_justificacion(){
+        try{
+            $message = "We did it. Your awesome... and beatiful";
+            $fechas = $this->registro->listar_fechas_justificacion();
+            $i = 0;
+            foreach ($fechas as $f){
+                //$datos[] = $f->fecha;
+                $docentes = $this->registro->listar_justificacion($f->fecha);
+                $datos[$i]['fecha'] = $f->fecha;
+                $datos[$i]['docentes'] = $docentes;
+                /*foreach ($docentes as $d){
+                    $datos[$f->fecha][] = $d;
+                }*/
+                $i++;
+            }
+            $result = 1;
+        } catch (Exception $e){
+            $this->log->insert($e->getMessage(), get_class($this).'|'.__FUNCTION__);
+            $datos = [];
+            $result = 2;
+            $message = "Code 2: General Error";
+        }
+        $response = array("code" => $result,"message" => $message);
+        $data = array("result" => $response, "data" => $datos);
+        echo json_encode($data);
+    }
+
+    public function listar_asistencias_entrada(){
+        $datos = [];
+        try{
+            $message = "We did it. Your awesome... and beatiful";
+            $fechas = $this->registro->listar_fechas_asistencia();
+            $i = 0;
+            foreach ($fechas as $f){
+                //$datos[] = $f->fecha;
+                $docentes = $this->registro->listar_asistencia_dia_entrada($f->fecha);
+                $datos[$i]['fecha'] = $f->fecha;
+                $datos[$i]['docentes'] = $docentes;
+
+                /*foreach ($docentes as $d){
+                    $datos[$f->fecha][] = $d;
+                }*/
+                $i++;
+            }
+            $result = 1;
+        }catch (Exception $e){
+            $this->log->insert($e->getMessage(), get_class($this).'|'.__FUNCTION__);
+            $result = 2;
+            $message = "Code 2: General Error";
+        }
+        //$response = array("code" => $result,"message" => $message);
+        $data = array("result" => $datos);
+        echo json_encode($data);
+    }
+
     public function listar_asistencia_persona(){
         try{
             //If All OK, the message does not change
@@ -272,34 +327,6 @@ class RegistroController{
         }
         $response = array("code" => $result,"message" => $message);
         $data = array("result" => $response, "data" => $datos);
-        echo json_encode($data);
-    }
-
-    public function listar_asistencias_entrada(){
-        $datos = [];
-        try{
-            $message = "We did it. Your awesome... and beatiful";
-            $fechas = $this->registro->listar_fechas_asistencia();
-            $i = 0;
-            foreach ($fechas as $f){
-                //$datos[] = $f->fecha;
-                $docentes = $this->registro->listar_asistencia_dia_entrada($f->fecha);
-                $datos[$i]['fecha'] = $f->fecha;
-                $datos[$i]['docentes'] = $docentes;
-
-                /*foreach ($docentes as $d){
-                    $datos[$f->fecha][] = $d;
-                }*/
-                $i++;
-            }
-            $result = 1;
-        }catch (Exception $e){
-            $this->log->insert($e->getMessage(), get_class($this).'|'.__FUNCTION__);
-            $result = 2;
-            $message = "Code 2: General Error";
-        }
-        //$response = array("code" => $result,"message" => $message);
-        $data = array("result" => $datos);
         echo json_encode($data);
     }
 

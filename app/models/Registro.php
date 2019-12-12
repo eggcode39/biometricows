@@ -267,4 +267,17 @@ class Registro{
         }
         return $result;
     }
+
+    public function listar_fechas_justificacion(){
+        try{
+            $sql = "select distinct fecha_justificacion fecha from justificacion order by dFecha asc";
+            $stm = $this->pdo->prepare($sql);
+            $stm->execute();
+            $result = $stm->fetchAll();
+        } catch (Exception $e){
+            $this->log->insert($e->getMessage(), get_class($this).'|'.__FUNCTION__);
+            $result = [];
+        }
+        return $result;
+    }
 }
