@@ -228,8 +228,8 @@ class RegistroController{
             $result = 2;
             $message = "Code 2: General Error";
         }
-        $response = array("code" => $result,"message" => $message);
-        $data = array("result" => $response, "data" => $datos);
+        //$response = array("code" => $result,"message" => $message);
+        $data = array("result" => $datos);
         echo json_encode($data);
     }
 
