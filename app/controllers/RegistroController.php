@@ -137,7 +137,18 @@ class RegistroController{
                 $model->dHora = $_POST['hora'];
                 $model->cTurno = $_POST['turno'];
                 $model->tipo = $_POST['tipo'];
-                $result = $this->registro->registrar_asistencia($model);
+
+                $nombre_foto = $_POST['fecha'] . '-'. $_POST['hora'];
+                $model->ubicacion_x = $_POST['ubicacion_x'];
+                $model->ubicacion_nombre = $_POST['ubicacion_nombre'];
+                $model->ubicacion_y = $_POST['ubicacion_y'];
+
+                $file_path = "media/asistencia/".$nombre_foto.".jpg";
+                file_put_contents($file_path, base64_decode($_POST['foto']));
+                $model->foto = $file_path;
+
+
+                $result = $this->registro->registrar_asistencia2($model);
                 if($result == 1){
                     $datos = $this->registro->listar_asistencia_persona($_POST['id_persona'], $_POST['fecha'], $_POST['hora']);
                 }
@@ -363,31 +374,31 @@ class RegistroController{
             $model = new Registro();
             //If All OK, the message does not change
             $message = "Code 1: Ok, Code 2: Error al crear Usuario";
-            if(isset($_POST['id_asistencia']) && isset($_POST['ubicacion_x']) && isset($_POST['ubicacion_y']) && isset($_POST['ubicacion_nombre'])){
-                $model->idAsistencia = $_POST['id_asistencia'];
-                $model->ubicacion_x = $_POST['ubicacion_x'];
-                $model->ubicacion_nombre = $_POST['ubicacion_nombre'];
-                $model->ubicacion_y = $_POST['ubicacion_y'];
-                if($_FILES['foto']['tmp_name']!= null){
-                    $model->foto = "media/asistencia/".$_POST['id_asistencia'].".jpg";
-                    $file_path_t = "tmp/asistencia/".$_POST['id_asistencia'].".jpg";
-                    move_uploaded_file($_FILES['foto']['tmp_name'],$file_path_t);
-                    $file_path = "media/asistencia/".$_POST['id_asistencia'].".jpg";
-                    if($this->imagecomp->redimensionarImagen($file_path_t, $file_path, false)){
-                        $model->foto = $file_path;
-                    } else {
-                        $model->foto = "";
-                    }
-                }else{
-                    $model->file_foto = "";
-                }
 
-                $result = $this->registro->registrar_foto($model);
-            } else {
-                $user = [];
-                $result = 6;
-                $message = "Code 6: Datos No Recibidos";
-            }
+            $model->idAsistencia = $_POST['id_asistencia'];
+            $model->ubicacion_x = $_POST['ubicacion_x'];
+            $model->ubicacion_nombre = $_POST['ubicacion_nombre'];
+            $model->ubicacion_y = $_POST['ubicacion_y'];
+
+            $file_path = "media/asistencia/".$_POST['id_asistencia'].".jpg";
+            file_put_contents($file_path, base64_decode($_POST['foto']));
+            $model->foto = $file_path;
+            /*if($_FILES['foto']['tmp_name']!= null){
+                $model->foto = "media/asistencia/".$_POST['id_asistencia'].".jpg";
+                $file_path_t = "tmp/asistencia/".$_POST['id_asistencia'].".jpg";
+                move_uploaded_file($_FILES['foto']['tmp_name'],$file_path_t);
+                $file_path = "media/asistencia/".$_POST['id_asistencia'].".jpg";
+                if($this->imagecomp->redimensionarImagen($file_path_t, $file_path, false)){
+                    $model->foto = $file_path;
+                } else {
+                    $model->foto = "";
+                }
+            }else{
+                $model->file_foto = "";
+            }*/
+
+            $result = $this->registro->registrar_foto($model);
+
         } catch (Exception $e){
             $this->log->insert($e->getMessage(), get_class($this).'|'.__FUNCTION__);
             $result = 2;

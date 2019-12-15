@@ -120,6 +120,29 @@ class Registro{
         return $result;
     }
 
+    public function registrar_asistencia2($model){
+        try{
+            $sql = "insert into asistencia (idPersona, dFecha, dHora, cTurno, tipo, ubicacion_x, ubicacion_y, ubicacion_nombre, foto) values (?,?,?,?,?,?,?,?,?)";
+            $stm = $this->pdo->prepare($sql);
+            $stm->execute([
+                $model->idPersona,
+                $model->dFecha,
+                $model->dHora,
+                $model->cTurno,
+                $model->tipo,
+                $model->ubicacion_x,
+                $model->ubicacion_y,
+                $model->ubicacion_nombre,
+                $model->foto
+            ]);
+            $result = 1;
+        } catch (Exception $e){
+            $this->log->insert($e->getMessage(), get_class($this).'|'.__FUNCTION__);
+            $result = 2;
+        }
+        return $result;
+    }
+
     public function registrar_justificacion($model){
         try{
             $sql = "insert into justificacion (idPersona, dFecha, cTipo, cDetalle, fecha_justificacion) values (?,?,?,?,?)";

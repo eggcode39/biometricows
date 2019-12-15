@@ -11,16 +11,16 @@ $pdf->AddPage('P');
 
 $pdf->AddFont('helveticab');
 $pdf->SetFont('Arial','B',12);
-$pdf->Cell(190,10,'Listado de Registros Dia:' . $_POST['fecha'] ,0,1,'C');
+$pdf->Cell(190,10,'Listado de Registros Dia: ' . $_POST['fecha'] ,0,1,'C');
 $pdf->Ln();
 
 foreach ($docentes as $d){
     $pdf->SetFont('Arial','B',12);
-    $pdf->Cell(190,10,'Turno :' . $d->cTurno ,0,1,'L');
+    $pdf->Cell(100,10,'Turno :' . $d->cTurno ,1,1,'L');
     $pdf->SetFont('Arial','',11);
-    $pdf->Cell(100,6,'Nombre : ' . $d->cNombres . ' ' . $d->cApellidos,0,1,'L',0);
-    $pdf->Cell(100,6,'DNI : ' . $d->cDNI,0,1,'L',0);
-    $pdf->Cell(100,6,'Hora : ' . $d->dHora,0,1,'L',0);
+    $pdf->Cell(100,6,'Nombre : ' . $d->cNombres . ' ' . $d->cApellidos,1,1,'L',0);
+    $pdf->Cell(100,6,'DNI : ' . $d->cDNI,1,1,'L',0);
+    $pdf->Cell(100,6,'Hora : ' . $d->dHora,1,1,'L',0);
     $pdf->Ln();
 }
 
