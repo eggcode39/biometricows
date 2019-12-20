@@ -34,14 +34,13 @@ class Registro{
 
     public function registrar_persona($model){
         try{
-            $sql = "insert into persona (cNombres, cApellidos, cDNI, cDireccion, cTipo, cEmail, cTelefono, cSexo, nEstado, dFechaReg) values (?,?,?,?,?,?,?,?,?,?)";
+            $sql = "insert into persona (cNombres, cApellidos, cDNI, cDireccion, cEmail, cTelefono, cSexo, nEstado, dFechaReg) values (?,?,?,?,?,?,?,?,?,?)";
             $stm = $this->pdo->prepare($sql);
             $stm->execute([
                 $model->cNombres,
                 $model->cApellidos,
                 $model->cDNI,
                 $model->cDireccion,
-                $model->cTipo,
                 $model->cEmail,
                 $model->cTelefono,
                 $model->cSexo,

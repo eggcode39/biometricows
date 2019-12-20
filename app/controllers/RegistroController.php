@@ -25,12 +25,12 @@ class RegistroController{
             $fecha = date("Y-m-d H:i:s");
             //If All OK, the message does not change
             $message = "Code 1: Ok, Code 2: Error al crear Usuario";
-            if(isset($_POST['nombres']) && isset($_POST['apellidos']) && isset($_POST['dni']) && isset($_POST['direccion']) && isset($_POST['tipo']) && isset($_POST['email']) && isset($_POST['telefono']) && isset($_POST['sexo']) && isset($_POST['user']) && isset($_POST['pass']) ){
+            if(isset($_POST['nombres']) && isset($_POST['apellidos']) && isset($_POST['dni']) && isset($_POST['direccion']) && isset($_POST['email']) && isset($_POST['telefono']) && isset($_POST['sexo']) && isset($_POST['user']) && isset($_POST['pass']) ){
                 $model->cNombres = $_POST['nombres'];
                 $model->cApellidos = $_POST['apellidos'];
                 $model->cDNI = $_POST['dni'];
                 $model->cDireccion = $_POST['direccion'];
-                $model->cTipo = $_POST['tipo'];
+                //$model->cTipo = $_POST['tipo'];
                 $model->cEmail = $_POST['email'];
                 $model->cTelefono = $_POST['telefono'];
                 $model->cSexo = $_POST['sexo'];
