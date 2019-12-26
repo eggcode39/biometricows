@@ -6,22 +6,42 @@
  * Time: 18:55
  */
 $pdf = new PDFF();
-$pdf->AliasNbPages();
-$pdf->AddPage('P');
 
-$pdf->AddFont('helveticab');
-$pdf->SetFont('Arial','B',12);
-$pdf->Cell(190,10,'Listado de Registros Dia: ' . $_POST['fecha'] ,0,1,'C');
+$pdf->AddPage();
+$pdf->AliasNbPages();
+
+$pdf->SetFont('Arial','U',12);
+$pdf->Cell(180,6,'Rango de Fechas: '.$inicio.' y '.$fin,0,1,'L',0);
 $pdf->Ln();
 
-foreach ($docentes as $d){
-    $pdf->SetFont('Arial','B',12);
-    $pdf->Cell(100,10,'Turno :' . $d->cTurno ,1,1,'L');
-    $pdf->SetFont('Arial','',11);
-    $pdf->Cell(100,6,'Nombre : ' . $d->cNombres . ' ' . $d->cApellidos,1,1,'L',0);
-    $pdf->Cell(100,6,'DNI : ' . $d->cDNI,1,1,'L',0);
-    $pdf->Cell(100,6,'Hora : ' . $d->dHora,1,1,'L',0);
+foreach ($fechas as $f){
+    $pdf->SetFont('Arial','',12);
+    $pdf->Cell(180,6,'Fecha de Control: ' . $f->fecha,0,1,'L',0);
+    $pdf->Ln();
+
+    $pdf->SetFillColor(232,232,232);
+    $pdf->SetFont('Arial','B',10);
+    $pdf->Cell(100,6,'Nombre Docente:',1,0,'C',1);
+    $pdf->Cell(30,6,'Hora Entrada',1,0,'C',1);
+    $pdf->Cell(30,6,'Hora Salida',1,0,'C',1);
+    $pdf->Ln();
+    foreach ($docentes as $d){
+        $entrada = $this->asistencia->listar_docente_entrada_dia($d->idPersona, $f->fecha);
+        $salida = $this->asistencia->listar_docente_salida_dia($d->idPersona, $f->fecha);
+        $pdf->Cell(100,6,'' . $d->cNombres . ' ' . $d->cApellidos,1,0,'C',1);
+        if(isset($entrada->id)){
+            $pdf->Cell(30,6,'' . $entrada->hora,1,0,'C',1);
+        } else {
+            $pdf->Cell(30,6,'SIN REGISTRO',1,0,'C',1);
+        }
+        if(isset($salida->id)){
+            $pdf->Cell(30,6,'' . $salida->hora,1,0,'C',1);
+        } else {
+            $pdf->Cell(30,6,'SIN REGISTRO',1,0,'C',1);
+        }
+        $pdf->Ln();
+    }
+    $pdf->Ln();
     $pdf->Ln();
 }
-
 $pdf->Output();

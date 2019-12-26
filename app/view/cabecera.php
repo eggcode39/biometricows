@@ -8,12 +8,16 @@
 require 'app/models/fpdf.php';
 class PDFF extends FPDF{
     function Header(){
-        $this->Image('media/calendar.png',11,7,21);
-        $this->SetFont('Arial','B',10);
+        //Arial bold 15
+        $this->SetFont('Arial','B',16);
+        //Mover
         $this->Cell(30);
-        $this->SetFont('Arial','B',12);
-        $this->Cell(200,10,'Control de Asistencia',0,0,'C');
-        $this->Ln();
+        //Titulo
+        $this->Cell(130,10,'Control de Asistencia',0,1,'C');
+        $this->SetFont('Arial','B',14);
+        $this->Cell(190,10,'Reporte Según Fechas',0,0,'C');
+        //Salto de linea
+        $this->Ln(20);
     }
     function Footer(){
         $fecha=date('Y-m-d H:i:s');
